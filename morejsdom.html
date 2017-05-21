@@ -1,0 +1,80 @@
+<html>
+<head>
+    <title>Основы AJAX: Снова JavaScript и DOM</title>
+    <script type="text/javascript" src="js/morejsdom.js"></script>
+    <script type="text/javascript" src="js/jquery-3.2.1.min.js"></script>
+    <script type="text/javascript">
+		$(document).ready(function() {
+		$("select[name='country']").bind("change", function() {
+		$("select[name='city']").empty();
+		$.get('ajax.php', {country: $("select[name='country']").val()},function(data){
+			data = JSON.parse(data);
+			
+			for(var id in data)
+			{
+				$("select[name='city']").append($("<option value='" + id + "'>" + data[id] + "</option>"));
+			}
+			console.log('json=', data);
+		});
+	});
+});    	
+    </script>
+</head>
+<body>	
+	<form id="postadd " action="javascript:void(null)" onsubmit="call()">
+		Name<br/>
+        <input name="login" placeholder="input name"  type="text" size="25" maxlength="50" value=""><br/>
+        Title<br/>
+        <input name="title" placeholder="input title" type="text" size="25" maxlength="50" value=""><br/>
+        Description <br/>
+        <textarea name="description" placeholder="input desc" cols=48 rows=10> </textarea><br/>
+        <input id="save" type="button" name="Save" value="Enter">
+	</form>    
+    <div id="results">
+    	
+    </div>
+
+	<label>Укажите страну</label>
+	<select name="country">
+		<option value="0" selected="selected">Country</option>
+		<option value="1">Russia</option>
+		<option value="2">USA</option>
+		<option value="3">France</option>
+	</select>
+	<label>Города</label>
+	<select name="city">
+		<option value="0"></option>		
+	</select>
+</body>
+<script type="text/javascript">
+	function call()
+	{
+		var msg = $('#postadd').serialize();
+		var dat = {'name' : 'valeron'};
+		
+		$.ajax({
+			url: 'ajax.php',
+			type: 'POST',			
+			cache: true,
+			data: dat,
+			success: function(data){
+				alert(data);
+			}
+		})
+		.done(function() {
+			console.log("success");
+		})
+		.fail(function() {
+			console.log("error");
+		})
+		.always(function() {
+			console.log("complete");
+		});
+	}
+
+	$('#save').click(function() {
+		
+	});
+
+</script>
+</html>
